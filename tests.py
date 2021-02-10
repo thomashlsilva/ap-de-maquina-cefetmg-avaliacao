@@ -115,7 +115,7 @@ class TestFold(unittest.TestCase):
         #verifica se os dados estao embaralhados
         arr_lista_fold0 = list(folds[0].df_data_to_predict.index.values)
         self.assertTrue(arr_lista_fold0!=[0,1,2], "A lista não foi embaralhada!")
-        self.assertListEqual(arr_lista_fold0,[14, 13, 17], "A lista não foi embaralhada corretamente! Não esqueça de usar a seed=seed+num_repeticoes")
+        self.assertListEqual(arr_lista_fold0,[14, 13, 17], "A lista não foi embaralhada corretamente! Não esqueça de usar a seed=seed+num_repeticao")
         #verifica se os dados foram divididos corretamente
 
         #testa cada repetição separadamente
