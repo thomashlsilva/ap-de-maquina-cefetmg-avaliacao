@@ -138,9 +138,9 @@ class Fold():
                     num_folds_validacao:int=0,num_repeticoes_validacao:int=1) -> List["Fold"]:
         """
         Implementar esta função de acordo com os comentários no código
-        Retorna um vetor arr_folds com todos os k folds criados a partir do DataFrame df
+        Retorna um vetor arr_folds com todos os k folds criados a partir do DataFrame df_dados
 
-        df: DataFrame com os dados a serem usados
+        df_dados: DataFrame com os dados a serem usados
         val_k: parametro k da validação cruzada de  k-folds
         col_classe: coluna que representa a classe
         seed: seed para a amostra aleatória
@@ -160,7 +160,7 @@ class Fold():
             df_dados_rand = None
 
             #Impressão dos ids dos dados (exiba o print para testes)
-            #print("Dados: "+str(df.index.values))
+            #print("Dados: "+str(df_dados_rand.index.values))
 
             #para cada fold num_fold:
             for num_fold in range(val_k):

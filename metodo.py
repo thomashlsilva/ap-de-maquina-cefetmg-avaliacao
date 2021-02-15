@@ -20,7 +20,7 @@ class ScikitLearnAprendizadoDeMaquina(MetodoAprendizadoDeMaquina):
     def eval(self, df_treino:pd.DataFrame, df_data_to_predict:pd.DataFrame, col_classe:str, seed:int=1) -> Resultado:
         #Atividade 2: Implementação da classe eval - veja passo a passo
 
-        #a partir de self.df_treino, separe os atributos  da classe
+        #a partir de df_treino, separe os atributos  da classe
         #x_treino deverá ser um dataframe que possua apenas as colunas dos atributos (use o método drop com o parametro axis)
         #y_treino deverá possuir apenas os valores coluna da classe
         x_treino = None
