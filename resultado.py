@@ -145,7 +145,7 @@ class Fold():
         col_classe: coluna que representa a classe
         seed: seed para a amostra aleatória
         """
-        #1. especifique o número de instancias por fold usando
+        #1. especifique o número de instancias da partição teste de cada fold usando
         #...o parametro val_k
         num_instances_per_partition = None
         #folds de saida
