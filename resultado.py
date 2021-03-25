@@ -22,17 +22,21 @@ class Resultado():
     def mat_confusao(self) -> np.ndarray:
         """
         Retorna a matriz de confusão.
-        O retorno np.ndarray é um array numpy, neste caso, a matriz de confusão
         """
         #caso a matriz de confusao já esteja calculada, retorna-la
         if self._mat_confusao  is not None:
             return self._mat_confusao
 
-        #instancia a matriz de confusao como uma matriz de zeros
-        #A matriz de confusão será o máximo entre os valores de self.y e self.predict_y
-        max_class_val = max([self.y.max(),self.predict_y.max()])
-        self._mat_confusao = np.zeros((max_class_val+1,max_class_val+1))
 
+        ## Obtem todos os valores de classes
+        set_classes = set(self.y)|set(self.predict_y)
+        #instancia a matriz de confusao como uma matriz de zeros
+        #A matriz de confusão terá o tamanho como o máximo entre os valores de self.y e self.predict_y
+        self._mat_confusao = {}
+        for classe_real in set_classes:
+            self._mat_confusao[classe_real] = {}
+            for classe_predita in set_classes:
+                self._mat_confusao[classe_real][classe_predita] = 0
 
 
         #incrementa os valores da matriz baseada nas listas self.y e self.predict_y
