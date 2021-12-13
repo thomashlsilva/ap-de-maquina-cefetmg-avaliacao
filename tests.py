@@ -186,7 +186,7 @@ class ExperimentoTest(unittest.TestCase):
         fold = exp.folds[0]
 
         arrExpMacroF1 =[0.16666666666666666,0.4444444444444444,
-                        0.48888888888888893,0.6190476190476191, 0.24999999999999997]
+                        0.48888888888888893,0.6190476190476191, 0.37499999999999994]
         exp.calcula_resultados()
 
         for i,macro_f1 in enumerate(arrExpMacroF1):
