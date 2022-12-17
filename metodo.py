@@ -2,8 +2,8 @@ from abc import abstractmethod
 from resultado import Resultado
 import pandas as pd
 from sklearn.base import ClassifierMixin, RegressorMixin
-
 from typing import List,Union
+
 class MetodoAprendizadoDeMaquina:
 
     @abstractmethod

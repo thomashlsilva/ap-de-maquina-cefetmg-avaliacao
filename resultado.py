@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from typing import List
+
 class Resultado():
     def __init__(self, y:List[float], predict_y:List[float]):
         """
@@ -27,7 +28,6 @@ class Resultado():
         if self._mat_confusao  is not None:
             return self._mat_confusao
 
-
         ## Obtem todos os valores de classes
         set_classes = set(self.y)|set(self.predict_y)
         #instancia a matriz de confusao como uma matriz de zeros
@@ -37,7 +37,6 @@ class Resultado():
             self._mat_confusao[classe_real] = {}
             for classe_predita in set_classes:
                 self._mat_confusao[classe_real][classe_predita] = 0
-
 
         #incrementa os valores da matriz baseada nas listas self.y e self.predict_y
         for i,classe_real in enumerate(self.y):
@@ -75,6 +74,7 @@ class Resultado():
                 self._precisao[classe] = 0
                 warnings.warn("Não há elementos previstos para a classe "+str(classe)+" precisão foi definida como zero.", UndefinedMetricWarning)
         return self._precisao
+
     @property
     def revocacao(self):
         if self._revocacao is not None:
@@ -125,6 +125,7 @@ class Resultado():
             num_previstos_corretamente += None
 
         return num_previstos_corretamente/len(self.y)
+
 class Fold():
     def __init__(self,df_treino :pd.DataFrame,  df_data_to_predict:pd.DataFrame,
                 col_classe:str,num_folds_validacao:int=0,num_repeticoes_validacao:int=0):
@@ -137,6 +138,7 @@ class Fold():
             self.arr_folds_validacao = self.gerar_k_folds(df_treino,num_folds_validacao,col_classe,num_repeticoes_validacao)
         else:
             self.arr_folds_validacao = []
+
     @staticmethod
     def gerar_k_folds(df_dados,val_k:int,col_classe:str,num_repeticoes:int=1,seed:int=1,
                     num_folds_validacao:int=0,num_repeticoes_validacao:int=1) -> List["Fold"]:
@@ -154,7 +156,6 @@ class Fold():
         num_instances_per_partition = None
         #folds de saida
         arr_folds = []
-
 
 
         for num_repeticao in range(num_repeticoes):
@@ -189,7 +190,6 @@ class Fold():
                 #5. Crie o fold (objeto da classe Fold) para adicioná-lo no vetor
                 fold = None
                 arr_folds.append(fold)
-
 
 
         #imprime o número instancias por fold (descomente para testes)

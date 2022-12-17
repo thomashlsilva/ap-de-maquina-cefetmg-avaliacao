@@ -73,15 +73,6 @@ class Experimento():
         Calcula a média do f1 dos resultados.
         """
         return None
-    @property
-    def acuracia(self) -> float:
-        """
-        Calcula a acuracia dos resultados.
-        """
-        return None
-
-
-
 
 class OtimizacaoObjetivo:
     def __init__(self,  fold: Fold):
