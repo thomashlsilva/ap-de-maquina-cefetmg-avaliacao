@@ -40,30 +40,31 @@ class Experimento():
         Retorna, para cada fold, o seu respectivo resultado
         """
         self._resultados = []
-        self.arr_validacao_por_fold = []#experimentos de validacao por fold
+        self.arr_validacao_por_fold = [] #experimentos de validacao por fold
         #seed para mater a reprodutibilidade dos experimentos
         np.random.seed(1)
         ## Para cada fold
         for i,fold in enumerate(self.folds):
-
             ##1. Caso haja um metodo de otimizacao, obtenha o melhor metodo com ele
-            #substitua os none quando necessario
+            # substitua os none quando necessario
             if(self.ClasseObjetivoOtimizacao is not None):
-                study = None
+                study = optuna.create_study(sampler=self.sampler, direction="maximize")
                 objetivo_otimizacao = self.ClasseObjetivoOtimizacao(fold)
-                study.optimize(None, None)
-
+                study.optimize(objetivo_otimizacao, self.num_trials)
+            
                 #1.(a) obtem o melhor metodo da otimização
                 #  . use o vetor arr_evaluated_methods e o número do best_trial (study.best_trial.number)
-                best_method = None
+                best_method = objetivo_otimizacao.arr_evaluated_methods[study.best_trial.number]
                 self.studies_per_fold.append(study)
             else:
                 #caso contrario, o metodo, atributo da classe Experimento (sem modificações) é usado
                 best_method = self.ml_method
 
             ##2. Efetua a predição nos valores de teste (fold.df_data_to_predict)
-            #logo após, adiciona em resultados o resultado predito (objeto da classe Resultado) usando o melhor metodo
-            resultado = None
+            # logo após, adiciona em resultados o resultado predito (objeto da classe Resultado) usando o melhor metodo
+            #print(treino_class[len(self.folds)*i:len(self.folds)*i+len(self.folds)]) 
+
+            resultado = best_method.eval(fold.df_treino, fold.df_data_to_predict, fold.col_classe)
             self._resultados.append(resultado)
         return self._resultados
 
@@ -72,7 +73,22 @@ class Experimento():
         """
         Calcula a média do f1 dos resultados.
         """
+        listRes = self.resultados
+        sumMF1 = 0
+        for i in range (0,len(listRes)):
+            sumMF1 += listRes[i].macro_f1
+            print(sumMF1)
+            
+        return sumMF1/len(listRes)
+    @property
+    def acuracia(self) -> float:
+        """
+        Calcula a acuracia dos resultados.
+        """
         return None
+
+
+
 
 class OtimizacaoObjetivo:
     def __init__(self,  fold: Fold):
@@ -88,7 +104,7 @@ class OtimizacaoObjetivo:
         raise NotImplementedError
 
     def __call__(self, trial: optuna.Trial) -> float:
-        #para cada fold, executa o método e calcula o resultado
+            #para cada fold, executa o método e calcula o resultado
         sum = 0
         metodo = self.obtem_metodo(trial)
         self.arr_evaluated_methods.append(metodo)
@@ -122,14 +138,14 @@ class OtimizacaoObjetivoRandomForest(OtimizacaoObjetivo):
         #Para passar nos testes, os parametros devem ter o seguintes nomes: "min_samples_split",
         #. "max_features" e "num_arvores". Não mude a ordem de atribuição
         #. abaixo
-        min_samples = None
-        max_features = None
-        num_arvores = None
+        min_samples = trial.suggest_uniform('min_samples_split', 0, 0.5)
+        max_features = trial.suggest_uniform('max_features', 0, 0.5)
+        num_arvores = trial.suggest_int('num_arvores', 1, self.num_arvores_max)
         #coloque, ao instanciar o RandomForestClassifier como random_state=2
-        clf_rf = None
+        clf_rf = RandomForestClassifier(n_estimators = num_arvores,random_state=2,min_samples_split=min_samples,max_features=max_features,)
 
         return ScikitLearnAprendizadoDeMaquina(clf_rf)
 
     def resultado_metrica_otimizacao(self, resultado:Resultado) ->float:
         #Atividade 4: calcule o resultado por meio do macro_f1
-        return None
+        return resultado.macro_f1

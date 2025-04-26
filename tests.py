@@ -108,13 +108,14 @@ class TestFold(unittest.TestCase):
         #print("DADOS: "+str(len(TestFold.df_dados)))
         tam_fold = len(Dados.df_dados)//k
         folds = Fold.gerar_k_folds(Dados.df_dados,col_classe="realClass",val_k=k,num_repeticoes=num_repeticoes,seed=1)
-
+        
         #verifica se foram 4 folds e 3 repetições
         self.assertEqual(k*num_repeticoes,len(folds),"O número de folds criado não é quantidade solicitada")
 
         #verifica se os dados estao embaralhados
         arr_lista_fold0 = list(folds[0].df_data_to_predict.index.values)
         
+        print("arr_lista_fold0 "+str(arr_lista_fold0))
         
         self.assertTrue(arr_lista_fold0!=[0,1,2], "A lista não foi embaralhada!")
         self.assertListEqual(arr_lista_fold0,[14, 13, 17], "A lista não foi embaralhada corretamente! Não esqueça de usar a seed=seed+num_repeticoes")
@@ -163,11 +164,9 @@ class ExperimentoTest(unittest.TestCase):
         warnings.simplefilter("ignore")
     def get_experimento(self,ml_method=DecisionTreeClassifier(min_samples_split=1,random_state=1),ClasseObjetivoOtimizacao=OtimizacaoObjetivoArvoreDecisao):
 
-
         folds = Fold.gerar_k_folds(Dados.df_dados,val_k=5,col_classe="realClass",
                                     num_repeticoes=1,seed=1,
                                     num_folds_validacao=3,num_repeticoes_validacao=2)
-
         exp = Experimento(folds,ml_method, ClasseObjetivoOtimizacao, num_trials=10,
                             sampler=optuna.samplers.TPESampler(seed=1, n_startup_trials=3))
         return exp
@@ -181,7 +180,7 @@ class ExperimentoTest(unittest.TestCase):
 
 
     def test_resultados(self):
-
+        
         exp = self.get_experimento()
         fold = exp.folds[0]
 
