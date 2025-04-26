@@ -1,4 +1,4 @@
-# [Nome do Projeto] - Otimização de Modelos de ML
+# Otimização de Modelos de ML
 
 ## Descrição
 Framework para experimentos de aprendizado de máquina com otimização automática de hiperparâmetros (Optuna) e validação cruzada.
